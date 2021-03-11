@@ -12,6 +12,7 @@
  * @return {number}
  */
 var networkDelayTime = function (times, n, k) {
+  // 预处理
   let source_target_map = {};
   times.forEach((time) => {
     if (!source_target_map[time[0]]) {
@@ -21,38 +22,40 @@ var networkDelayTime = function (times, n, k) {
   });
   let currentTargets = Object.assign({}, source_target_map[k]);
   let finishMap = {};
-  finishMap[n] = 0;
+  finishMap[k] = 0;
   let t = 1;
+  // 最小合并
   function merge(target, source) {
     for (let key in source) {
+      if (finishMap[key]) {
+        continue;
+      }
       let value = source[key];
       if (!target[key] || target[key] > value) {
         target[key] = value;
       }
     }
   }
+  //递归
   function next() {
+    // 先检查 完成+结束
     let nextTargets = {};
+    // 再递减
     for (let target in currentTargets) {
-      let temp = {};
-      temp[target] = currentTargets[target] - 1;
-      console.log("temp", temp);
-      merge(nextTargets, temp);
-      console.log("nextTargets 1", nextTargets);
-      if (currentTargets[target] === 1) {
-        // 本次为1 则为到达 检查子类
-        merge(nextTargets, source_target_map[target]);
-        console.log("nextTargets children", nextTargets);
-      }
-    }
-    for (let target in nextTargets) {
       if (finishMap[target]) {
         delete nextTargets[target];
-      } else if (nextTargets[target] === 0) {
-        finishMap[target] = t;
+      } else if (currentTargets[target] === 0) {
         delete nextTargets[target];
+        merge(nextTargets, source_target_map[target]);
+        finishMap[target] = t;
+      } else {
+        let leftT = currentTargets[target] - 1;
+        if (!nextTargets[target] || nextTargets[target] > value) {
+          nextTargets[target] = leftT;
+        }
       }
     }
+
     console.log(finishMap, nextTargets, t);
     if (
       Object.keys(finishMap).length === n ||
