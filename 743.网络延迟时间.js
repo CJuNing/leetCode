@@ -13,7 +13,6 @@
  */
 var networkDelayTime = function (times, n, k) {
   let source_target_map = {};
-  n = n - 1;
   times.forEach((time) => {
     if (!source_target_map[time[0]]) {
       source_target_map[time[0]] = {};
@@ -22,6 +21,7 @@ var networkDelayTime = function (times, n, k) {
   });
   let currentTargets = Object.assign({}, source_target_map[k]);
   let finishMap = {};
+  finishMap[n] = 0;
   let t = 1;
   function merge(target, source) {
     for (let key in source) {
