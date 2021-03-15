@@ -11,8 +11,47 @@
  * @param {number} k
  * @return {number}
  */
+var map = {};
+var result = {};
+var maxTime = 0;
+var source_target_map = {};
 var networkDelayTime = function (times, n, k) {
   // 预处理
+  source_target_map = collectInfo(times);
+  //
+  map = {};
+  result = {};
+  maxTime = 0;
+  map[k] = 0;
+  //
+  loop(source_target_map[k] || {}, `{${k}}`, 0);
+  console.log(map, result);
+  //
+  if (Object.keys(result).length === n - 1) {
+    for (var key in result) {
+      maxTime = Math.max(maxTime, result[key]);
+    }
+    return maxTime;
+  } else {
+    return -1;
+  }
+};
+
+var loop = (children, basePath, baseTime) => {
+  for (var child in children) {
+    let pathTime = baseTime + children[child];
+    if (basePath.indexOf(`{${child}}`) === -1) {
+      if (!result[child] || result[child] > pathTime) {
+        result[child] = pathTime;
+      }
+      if (source_target_map[child]) {
+        loop(source_target_map[child], basePath + `{${child}}`, result[child]);
+      }
+    }
+  }
+};
+
+var collectInfo = (times) => {
   let source_target_map = {};
   times.forEach((time) => {
     if (!source_target_map[time[0]]) {
@@ -20,59 +59,15 @@ var networkDelayTime = function (times, n, k) {
     }
     source_target_map[time[0]][time[1]] = time[2];
   });
-  let currentTargets = Object.assign({}, source_target_map[k]);
-  let finishMap = {};
-  finishMap[k] = 0;
-  let t = 1;
-  // 最小合并
-  function merge(target, source) {
-    for (let key in source) {
-      if (finishMap[key]) {
-        continue;
-      }
-      let value = source[key];
-      if (!target[key] || target[key] > value) {
-        target[key] = value;
-      }
-    }
-  }
-  //递归
-  function next() {
-    // 先检查 完成+结束
-    let nextTargets = {};
-    // 再递减
-    for (let target in currentTargets) {
-      if (finishMap[target]) {
-        delete nextTargets[target];
-      } else if (currentTargets[target] === 0) {
-        delete nextTargets[target];
-        merge(nextTargets, source_target_map[target]);
-        finishMap[target] = t;
-      } else {
-        let leftT = currentTargets[target] - 1;
-        if (!nextTargets[target] || nextTargets[target] > value) {
-          nextTargets[target] = leftT;
-        }
-      }
-    }
-
-    console.log(finishMap, nextTargets, t);
-    if (
-      Object.keys(finishMap).length === n ||
-      Object.keys(nextTargets).length === 0
-    ) {
-      return;
-    } else {
-      currentTargets = nextTargets;
-      t++;
-      next();
-    }
-  }
-  next();
-  if (Object.keys(finishMap).length == n) {
-    return t;
-  } else {
-    return -1;
-  }
+  return source_target_map;
 };
+
 // @lc code=end
+networkDelayTime(
+  [
+    [1, 2, 1],
+    [2, 1, 3],
+  ],
+  2,
+  2
+);
