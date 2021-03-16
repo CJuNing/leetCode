@@ -18,12 +18,13 @@ var networkDelayTime = function (times, n, k) {
   // 预处理
   source_target_map = collectInfo(times);
   result = {};
+  result[k] = 0;
   maxTime = 0;
   //
   loop(source_target_map[k] || {}, 0);
-  console.log(result);
+  //   console.log(result);
   //
-  if (Object.keys(result).length === n - 1) {
+  if (Object.keys(result).length === n) {
     for (var key in result) {
       maxTime = Math.max(maxTime, result[key]);
     }
@@ -34,10 +35,10 @@ var networkDelayTime = function (times, n, k) {
 };
 
 var loop = (children, baseTime) => {
+  //   console.log(children, baseTime, result);
   for (var child in children) {
     let pathTime = baseTime + children[child];
-    console.log(pathTime);
-    if (!result[child] || result[child] > pathTime) {
+    if (result[child] === undefined || result[child] > pathTime) {
       // 没有完成的直接写入，并检查子项
       // 如果当前路径小于result记录的 则继续检查
       result[child] = pathTime;
@@ -60,11 +61,3 @@ var collectInfo = (times) => {
 };
 
 // @lc code=end
-networkDelayTime(
-  [
-    [1, 2, 1],
-    [2, 1, 3],
-  ],
-  2,
-  2
-);
