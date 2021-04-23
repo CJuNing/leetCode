@@ -50,9 +50,18 @@ A(str, mark);
 B(str.split(""), mark.split(""));
 C(str.split(""), mark.split(""));
 
+// str += "yahaha";
 // 18874368
 // String.indexOf: 10.591064453125 ms
 // 18874368
 // Array.match: 210.509033203125 ms
 // 18874368
 // Array.indexOf: 107.285888671875 ms
+
+// str = "yahaha" + str;
+// 0
+// String.indexOf: 7.275146484375 ms
+// 0
+// Array.match: 0.118896484375 ms
+// 0
+// Array.indexOf: 0.11572265625 ms
