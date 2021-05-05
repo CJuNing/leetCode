@@ -1,0 +1,22 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "description": "LeetCode结题汇总",
+  "main": "1208.尽可能使字符串相等.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CJuNing/leetCode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CJuNing/leetCode/issues"
+  },
+  "homepage": "https://github.com/CJuNing/leetCode#readme",
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}
